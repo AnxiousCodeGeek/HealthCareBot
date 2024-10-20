@@ -8,7 +8,12 @@ import streamlit as st
 api_key = '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'  # Replace with your actual API key
 client = Groq(api_key=api_key)
 
-drive_folder_path = '/home/ncai-scl/chatbot/healthcare_chatbot_dashboard/databases'  # Update this path to your desired local directory
+# Define a relative path for the database directory
+drive_folder_path = os.path.join(os.getcwd(), 'databases')
+
+# Create the database directory if it doesn't exist
+if not os.path.exists(drive_folder_path):
+    os.makedirs(drive_folder_path)
 
 def setup_database():
     # Create a timestamp for the database filename
@@ -53,7 +58,7 @@ def healthcare_chatbot():
     conn, db_file_name = setup_database()
     
     # Add an icon at the top without a caption
-    icon_path = "/home/ncai-scl/chatbot/healthcare_chatbot_dashboard/chatbot.png"  # Replace with your icon path
+    icon_path = os.path.join(os.getcwd(), 'chatbot.png')  # Replace with your icon file name
     col1, col2, col3 = st.columns([1, 3, 7])  # Wider center column for more space
     with col3:
         st.image(icon_path, width=150)  # Display the icon without caption
@@ -61,9 +66,6 @@ def healthcare_chatbot():
     # Add the title below the icon
     st.markdown("<h2 style='text-align: center; color: #ffffff;'>HealthCare Assistant</h2>", unsafe_allow_html=True)
     
-    # Set the title next to the icon
-    # st.markdown("<h1 style='display: inline; color: #000000;'>Healthcare Chatbot</h1>", unsafe_allow_html=True)
-
     st.write("Welcome to the Healthcare Chatbot! I will try my best to answer your health-related queries.")
 
     # Initialize session state for chat sessions if not already done
@@ -146,8 +148,6 @@ def healthcare_chatbot():
             st.write("No chat history available for this session.")
 
     conn.close()  # Close the database connection
-
-
 
 # Start the chatbot session
 if __name__ == "__main__":
